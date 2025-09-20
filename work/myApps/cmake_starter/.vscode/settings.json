@@ -1,0 +1,7 @@
+{
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+    "C_Cpp.default.compilerPath": "/usr/bin/aarch64-linux-gnu-gcc",
+    "files.associations": {
+        "time.h": "c"
+    }
+}
