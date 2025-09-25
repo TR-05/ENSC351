@@ -39,5 +39,13 @@ sudo chmod ugo+rwx /dev/spidev*
 echo enable gpio *not actually sure if how proper this works tbh
 sudo apt-get install python3-rpi.gpio
 
-sudo usermod -a -G gpio trevor
-sudo usermod -a -G dialout trevor
+sudo usermod -a -G spi trevor
+sudo nano /etc/udev/rules.d/99-spi-access.rules
+echo # Set group ownership and permissions for SPI devices
+echo KERNEL=="spidev0.0", GROUP="spi", MODE="0660"
+echo KERNEL=="spidev0.1", GROUP="spi", MODE="0660"
+
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+
+sudo reboot
