@@ -90,7 +90,7 @@ void led_pwr_set_blink(int on_time_ms, int off_time_ms)
     snprintf(off_time_str, sizeof(off_time_str), "%d", off_time_ms);
     led_write_to_file(PWR_TRIGGER_FILE, "timer");
     led_write_to_file(PWR_BRIGHTNESS_FILE, "1");
-    led_sleep_ms(50);
+    led_sleep_ms(10); // 10ms appears to work fine but should do more testing
     led_write_to_file(PWR_DELAY_OFF_FILE, off_time_str);
     led_write_to_file(PWR_DELAY_ON_FILE, on_time_str);
 }
@@ -103,7 +103,7 @@ void led_act_set_blink(int on_time_ms, int off_time_ms)
     snprintf(off_time_str, sizeof(off_time_str), "%d", off_time_ms);
     led_write_to_file(ACT_TRIGGER_FILE, "timer");
     led_write_to_file(ACT_BRIGHTNESS_FILE, "1");
-    led_sleep_ms(50);
+    led_sleep_ms(10); // 10ms appears to work fine but should do more testing
     led_write_to_file(ACT_DELAY_OFF_FILE, off_time_str);
     led_write_to_file(ACT_DELAY_ON_FILE, on_time_str);
 }

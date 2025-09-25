@@ -1,5 +1,6 @@
 echo host side stuff
 ./Desktop/internetToTarget.sh
+sudo apt-get install libgpiod-dev
 
 ssh-keygen -f "/home/trevor/.ssh/known_hosts" -R "192.168.7.2"
 ssh-copy-id trevor@192.168.7.2
@@ -24,23 +25,16 @@ sudo apt install nfs-common
 sudo mkdir /mnt/remote
 sudo chown trevor /mnt/remote
 sudo mount -t nfs 192.168.7.1:/home/trevor/ENSC351/public /mnt/remote
+		
 
-
-echo spi stuff
-cp -R /opt/source/dtb-6.12-Beagle ~
-cd ~
-git clone https://github.com/wcs3/BYAI-mcu_spi0.git
-cd ~/dtb-6.12-Beagle/src/arm64/overlays/
-cp ~/BYAI-mcu_spi0/k3-am67a-beagley-ai-spidev0-mcu.dts .
-
-echo edit in nano this under rtc0 in alias:    spi0 = &mcu_spi0;
-nano ~/dtb-6.12-Beagle/src/arm64/ti/k3-am67a-beagley-ai.dts
-
-
-
-# DO NOT RUN SUDO MAKE INSTALL_ARM64 - IT MAKES THE BOARD UNRESPONSIVE AND I DONT KNOW HOW TO FIX IT
-cd ~/dtb-6.12-Beagle/
-make
-sudo make install_arm64
-echo 6. Enable the SPI overlay and configure buffer size:
+echo enable spi
 nano /boot/firmware/extlinux/extlinux.conf
+echo add fdtoverlays /overlays/k3-am67a-beagley-ai-spidev0.dtbo
+sudo shutdown -r now
+sudo apt-get update
+sudo apt-get install -y python3-spidev
+sudo chmod ugo+rwx /dev/spidev*
+
+
+echo enable gpio *not actually sure if how proper this works tbh
+sudo apt-get install python3-rpi.gpio

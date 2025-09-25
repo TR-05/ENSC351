@@ -4,6 +4,13 @@
     "files.associations": {
         "time.h": "c",
         "spidev.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "badmath.h": "c",
+        "stdlib.h": "c",
+        "gpiod.h": "c",
+        "unistd.h": "c",
+        "errno.h": "c",
+        "string.h": "c",
+        "button.h": "c"
     }
 }

@@ -1,0 +1,188 @@
+pioinfo
+gpiochip0 - 24 lines:
+	line   0:	"GPIO8"         	output active-low consumer="spi0 CS0"
+	line   1:	unnamed         	input
+	line   2:	"GPIO11"        	output consumer="sck"
+	line   3:	"GPIO10"        	output consumer="mosi"
+	line   4:	"GPIO9"         	input consumer="miso"
+	line   5:	unnamed         	input
+	line   6:	unnamed         	output consumer=reset
+	line   7:	"GPIO23"        	input
+	line   8:	unnamed         	output consumer=enable
+	line   9:	"GPIO7"         	output active-low consumer="spi0 CS1"
+	line  10:	"GPIO24"        	input
+	line  11:	unnamed         	input
+	line  12:	unnamed         	input
+	line  13:	"HDMI_RSTn"     	input
+	line  14:	"HDMI_INTn"     	input
+	line  15:	unnamed         	input
+	line  16:	unnamed         	input
+	line  17:	"GPIO3"         	input
+	line  18:	"GPIO2"         	input
+	line  19:	unnamed         	input
+	line  20:	unnamed         	input
+	line  21:	unnamed         	input
+	line  22:	unnamed         	input
+	line  23:	unnamed         	input
+gpiochip1 - 87 lines:
+	line   0:	unnamed         	input
+	line   1:	unnamed         	output consumer=MIPI_SWITCH_OE
+	line   2:	unnamed         	output consumer=MIPI_SWITCH_SEL
+	line   3:	unnamed         	input
+	line   4:	unnamed         	output consumer=regulator-7
+	line   5:	unnamed         	input
+	line   6:	unnamed         	input
+	line   7:	unnamed         	input
+	line   8:	unnamed         	input
+	line   9:	unnamed         	input
+	line  10:	unnamed         	input
+	line  11:	unnamed         	output active-low consumer=PWR
+	line  12:	unnamed         	output consumer=ACT
+	line  13:	unnamed         	input
+	line  14:	unnamed         	input
+	line  15:	unnamed         	input
+	line  16:	unnamed         	input
+	line  17:	unnamed         	input
+	line  18:	unnamed         	input
+	line  19:	unnamed         	input
+	line  20:	unnamed         	input
+	line  21:	unnamed         	input
+	line  22:	unnamed         	input
+	line  23:	unnamed         	input
+	line  24:	unnamed         	input
+	line  25:	unnamed         	input
+	line  26:	unnamed         	input
+	line  27:	unnamed         	input
+	line  28:	unnamed         	input
+	line  29:	unnamed         	input
+	line  30:	unnamed         	input
+	line  31:	unnamed         	input
+	line  32:	"USB_RST"       	output active-low consumer="reset"
+	line  33:	"GPIO27"        	input
+	line  34:	unnamed         	input
+	line  35:	unnamed         	input
+	line  36:	"GPIO26"        	input
+	line  37:	unnamed         	input
+	line  38:	"GPIO4"         	input
+	line  39:	unnamed         	input
+	line  40:	unnamed         	input
+	line  41:	"GPIO22"        	input
+	line  42:	"GPIO25"        	input
+	line  43:	unnamed         	input
+	line  44:	unnamed         	input
+	line  45:	unnamed         	input
+	line  46:	unnamed         	input
+	line  47:	unnamed         	input
+	line  48:	unnamed         	input
+	line  49:	unnamed         	input
+	line  50:	unnamed         	input
+	line  51:	unnamed         	input
+	line  52:	unnamed         	input
+	line  53:	unnamed         	input
+	line  54:	unnamed         	input
+	line  55:	unnamed         	input
+	line  56:	unnamed         	input
+	line  57:	unnamed         	input
+	line  58:	unnamed         	input
+	line  59:	unnamed         	input
+	line  60:	unnamed         	input
+	line  61:	unnamed         	input
+	line  62:	unnamed         	input
+	line  63:	unnamed         	input
+	line  64:	unnamed         	input
+	line  65:	unnamed         	input
+	line  66:	unnamed         	input
+	line  67:	unnamed         	input
+	line  68:	unnamed         	input
+	line  69:	unnamed         	input
+	line  70:	unnamed         	input
+	line  71:	unnamed         	input
+	line  72:	unnamed         	input
+	line  73:	unnamed         	input
+	line  74:	unnamed         	input
+	line  75:	unnamed         	input
+	line  76:	unnamed         	input
+	line  77:	unnamed         	input
+	line  78:	unnamed         	input
+	line  79:	unnamed         	input
+	line  80:	unnamed         	input
+	line  81:	unnamed         	input
+	line  82:	unnamed         	input
+	line  83:	unnamed         	input
+	line  84:	unnamed         	input
+	line  85:	unnamed         	input
+	line  86:	unnamed         	input
+gpiochip2 - 73 lines:
+	line   0:	unnamed         	input
+	line   1:	unnamed         	input
+	line   2:	unnamed         	input
+	line   3:	unnamed         	input
+	line   4:	unnamed         	input
+	line   5:	unnamed         	input
+	line   6:	unnamed         	input
+	line   7:	"GPIO16"        	input
+	line   8:	"GPIO17"        	input
+	line   9:	"GPIO21"        	input
+	line  10:	"GPIO20"        	input
+	line  11:	"GPIO18"        	input
+	line  12:	"GPIO19"        	input
+	line  13:	"GPIO15"        	input
+	line  14:	"GPIO14"        	input
+	line  15:	"GPIO5"         	input
+	line  16:	"GPIO12"        	input
+	line  17:	"GPIO6"         	input
+	line  18:	"GPIO13"        	input
+	line  19:	unnamed         	input
+	line  20:	unnamed         	input
+	line  21:	unnamed         	input
+	line  22:	unnamed         	input
+	line  23:	unnamed         	input
+	line  24:	unnamed         	input
+	line  25:	unnamed         	input
+	line  26:	unnamed         	input
+	line  27:	unnamed         	input
+	line  28:	unnamed         	input
+	line  29:	unnamed         	input
+	line  30:	unnamed         	input
+	line  31:	unnamed         	input
+	line  32:	unnamed         	input
+	line  33:	unnamed         	input
+	line  34:	unnamed         	input
+	line  35:	unnamed         	input
+	line  36:	unnamed         	input
+	line  37:	unnamed         	input
+	line  38:	unnamed         	input
+	line  39:	unnamed         	input
+	line  40:	unnamed         	input
+	line  41:	unnamed         	input
+	line  42:	unnamed         	input
+	line  43:	unnamed         	input
+	line  44:	unnamed         	input
+	line  45:	unnamed         	input
+	line  46:	unnamed         	input
+	line  47:	unnamed         	input
+	line  48:	unnamed         	input active-low consumer=cd
+	line  49:	unnamed         	output consumer=tlv71033
+	line  50:	unnamed         	output consumer=regulator-3
+	line  51:	unnamed         	input
+	line  52:	unnamed         	input
+	line  53:	unnamed         	input
+	line  54:	unnamed         	input
+	line  55:	unnamed         	input
+	line  56:	unnamed         	input
+	line  57:	unnamed         	input
+	line  58:	unnamed         	input
+	line  59:	unnamed         	input
+	line  60:	unnamed         	input
+	line  61:	unnamed         	input
+	line  62:	unnamed         	input
+	line  63:	unnamed         	input
+	line  64:	unnamed         	input
+	line  65:	unnamed         	input
+	line  66:	unnamed         	input
+	line  67:	unnamed         	input
+	line  68:	unnamed         	input
+	line  69:	unnamed         	input
+	line  70:	unnamed         	input
+	line  71:	unnamed         	input
+	line  72:	unnamed         	input

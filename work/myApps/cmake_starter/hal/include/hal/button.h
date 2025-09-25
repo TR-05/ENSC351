@@ -1,13 +1,24 @@
-// Sample button module 
-// Part of the Hardware Abstraction Layer (HAL) 
-
-#ifndef _BUTTON_H_
-#define _BUTTON_H_
+#ifndef BUTTON_H
+#define BUTTON_H
 
 #include <stdbool.h>
 
-void button_init(void);
-bool button_is_button_pressed(void);
-void button_cleanup(void);
+/*
+Header file giving access to gpio button data
+*/
 
-#endif
+// initializes gpio communication with the button
+int button_initialize(void);
+
+// returns if button is currently pressed or not
+bool button_pressing(void);
+
+// returns 1 if it detects a rising edge, 0 otherwise
+bool button_rising_edge(void);
+
+// returns 1 if it detects a falling edge, 0 otherwise
+bool button_falling_edge(void);
+
+void button_disable(void);
+
+#endif // BUTTON_H
