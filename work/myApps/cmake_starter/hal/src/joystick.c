@@ -150,10 +150,12 @@ int joystick_initialize(void)
 // gets the raw 12 bit data from the joystick
 float joystick_get_x_raw(void)
 {
+    usleep(500); // let adc calculate
     return (float)(read_mcp3208_channel(fd, X_CHANNEL));
 }
 float joystick_get_y_raw(void)
 {
+    usleep(500); // let adc calculate
     return (float)(read_mcp3208_channel(fd, Y_CHANNEL));
 }
 
