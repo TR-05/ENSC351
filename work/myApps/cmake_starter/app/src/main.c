@@ -7,99 +7,50 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
-#include "reaction_methods.h"
+#include "game.h"
+
+/*
+Control Flow:
+
+ - main initialization
+ - game loop
+  - ready print
+  - generate rng and check for quit
+  - start timer and break when user inputs joystick
+  - quit if timer > 5000 ms or |x| above threshold
+  - process time and joystick values for high score / led control
+  - print out result
+  - back to start of loop
+- reset state and quit program
+*/
 
 int main()
 {
-    // setup leds and joystick, print intro text to player terminal
-    reaction_initialize();
+    game_initialize();
+    game_print_intro();
 
-    float best_time = 5000;
-    // main game loop
+    float best_time = 5000; // Initialize with the timeout value
+
+    // Game loop
     while (true)
     {
-        // print Get Ready and blink LEDs
-        reaction_prep_user();
+        game_ready_sequence(); // Ready phase and input check
 
-        // repeat random generation if player inputs too soon
-        int dir = reaction_gen_rng();
-        if (dir == 0)
-        {
-            printf("User selected to quit.\n");
-            fflush(stdout);
-            break;
-        }
-        reaction_start_timer();
-        // wait for player input or break if player is inactive
-        while (!(fabs(joystick_get_x_normalized()) > 0.75 || fabs(joystick_get_y_normalized()) > 0.75 || reaction_read_timer_ms() >= 5000))
-            ;
+        int required_dir = game_wait_for_stimulus(); //  Wait for stimulus and get required direction
 
-        // save loop time before anything else for accuracy
-        float reaction_time = reaction_read_timer_ms();
-
-        // exit main game loop if player is inactive
-        if (reaction_read_timer_ms() >= 5000)
-        {
-            printf("No input within 5000ms; quitting!\n");
-            fflush(stdout);
-            break; // 5 second timeout
-        }
-
-        // turn off leds once reaction test is finished
-        led_act_set_off();
-        led_pwr_set_off();
-
-        // save joystick state immediately after loop exits to determine outcome
-        float y = joystick_get_y_normalized();
-        float x = joystick_get_x_normalized();
-
-        // exit main game loop if player wants to quit (or just fumbles that badly)
-        if (fabs(x) > 0.75)
-        {
-            printf("User selected to quit.\n");
-            fflush(stdout);
+        if (required_dir == 0)
+        { // Player quit during the wait
             break;
         }
 
-        // if user moved the joystick in the right direction readout their time + highscore
-        if (y / fabs(y) == dir)
-        {
-            printf("Correct!\n");
-            fflush(stdout);
-            if (reaction_time < best_time)
-            {
-                best_time = reaction_time;
-                printf("New best time!\n");
-                fflush(stdout);
-            }
-            printf("Your reaction time was %dms; best so far in game is %dms\n", (int)reaction_time, (int)best_time);
-            fflush(stdout);
-            for (int i = 0; i < 5; i++)
-            {
-                led_act_set_on();
-                usleep(100000);
-                led_act_set_off();
-                usleep(100000);
-            }
-        }
-        // if user moved the joystick in the wrong direction make fun of them
-        else
-        {
-            printf("Incorrect.\n");
-            fflush(stdout);
-            for (int i = 0; i < 5; i++)
-            {
-                led_pwr_set_on();
-                usleep(100000);
-                led_pwr_set_off();
-                usleep(100000);
-            }
+        game_start_timer();
+
+        if (!game_process_reaction(required_dir, &best_time))
+        { // Player quit or timed out during the reaction phase
+            break;
         }
     }
 
-    // disable spi cleanly and turn off leds to return to default state when program ends
-    joystick_disable();
-    led_act_set_off();
-    led_pwr_set_off();
+    game_cleanup();
     return 0;
 }
