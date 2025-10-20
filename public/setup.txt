@@ -4,6 +4,10 @@ sudo apt-get install libgpiod-dev
 
 ssh-keygen -f "/home/trevor/.ssh/known_hosts" -R "192.168.7.2"
 ssh-copy-id trevor@192.168.7.2
+
+ssh-keygen -t ed25519 -C "trevor.ruttan05@gmail.com"
+ssh-keygen -f "/home/trevor/.ssh/known_hosts" -R "192.168.7.1"
+ssh-copy-id trevor@192.168.7.1
 ssh trevor@192.168.7.2
 
 echo target side stuff
@@ -36,7 +40,7 @@ sudo apt-get install -y python3-spidev
 sudo chmod ugo+rwx /dev/spidev*
 
 
-echo enable gpio *not actually sure if how proper this works tbh
+echo enable gpio *not actually sure of how proper this works tbh
 sudo apt-get install python3-rpi.gpio
 
 sudo usermod -a -G spi trevor
@@ -151,3 +155,15 @@ sudo apt install python3-numpy python3-matplotlib
 
 cd ~/ENSC351/work/frames
 python3 visualize_depth.py 'depth_frame_*.csv'
+
+sudo touch /etc/rc.local
+sudo chmod 744 /etc/rc.local
+sudo nano /etc/rc.local
+#!/bin/sh -e
+#
+# Increase USBFS memory for Kinect V2
+echo 1000 > /sys/module/usbcore/parameters/usbfs_memory_mb
+
+exit 0
+sudo reboot
+cat /sys/module/usbcore/parameters/usbfs_memory_mb
