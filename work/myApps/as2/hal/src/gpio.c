@@ -46,19 +46,16 @@ static gpio_info_t gpio_add_offset(const char chip[], unsigned int offset)
 
     if (chip[8] == '0')
     {
-        printf("0\n\n");
         offsets = chip0_offsets;
         c = &chip_0_offset_count;
     }
     else if (chip[8] == '1')
     {
-        printf("1\n\n");
         offsets = chip1_offsets;
         c = &chip_1_offset_count;
     }
     else
     {
-        printf("2\n\n");
         offsets = chip2_offsets;
         c = &chip_2_offset_count;
     }
@@ -86,8 +83,20 @@ static gpio_info_t gpio_add_offset(const char chip[], unsigned int offset)
 // initializes gpio communication with the gpio
 int gpio_initialize(int pin)
 {
+    if (chip) {
+        gpiod_chip_close(chip);
+        chip = NULL; // Set to NULL after freeing
+    }
+    if (settings) {
+        gpiod_line_settings_free(settings);
+        settings = NULL;
+    }
+    if (line_cfg) {
+        gpiod_line_config_free(line_cfg);
+        line_cfg = NULL;
+    }
+
     gpio_map_label_to_gpio(pin, &pin_map);
-    printf("pin: %d\n", pin);
     gpio_info_t info = gpio_add_offset(pin_map.chip_name, pin_map.line_offset);
     char chip_path[64];
 

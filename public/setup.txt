@@ -33,7 +33,16 @@ sudo mount -t nfs 192.168.7.1:/home/trevor/ENSC351/public /mnt/remote
 
 echo enable spi
 nano /boot/firmware/extlinux/extlinux.conf
-echo add fdtoverlays /overlays/k3-am67a-beagley-ai-spidev0.dtbo
+echo add   fdtoverlays /overlays/k3-am67a-beagley-ai-spidev0.dtbo
+echo while we are here enable pwm0
+echo add   fdtoverlays /overlays/k3-am67a-beagley-ai-pwm-epwm0-gpio12.dtbo
+k3-am67a-beagley-ai-pwm-ecap0-gpio12.dtbo
+k3-am67a-beagley-ai-pwm-ecap1-gpio16.dtbo
+k3-am67a-beagley-ai-pwm-ecap2-gpio18.dtbo
+k3-am67a-beagley-ai-pwm-epwm0-gpio12.dtbo
+k3-am67a-beagley-ai-pwm-epwm1-gpio13.dtbo
+
+
 sudo shutdown -r now
 sudo apt-get update
 sudo apt-get install -y python3-spidev

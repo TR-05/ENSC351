@@ -7,26 +7,6 @@
 #include "hal/spi.h"
 
 #define DEBUG_MODE false
-/*
-My Notes:
-generic spi involves the following steps:
-Config:
-    Open spidev file
-    configure mode, bits per word, and speed
-
-Perform transfer:
-    define length of transfer
-    create arrays of uint8_t[LENGTH] tx and rx, aka transfer bits and recieve bits
-    set transfer bits to whatever message you need
-    put data into a specific struct
-    pass struct reference into ioctl and it will modify rx with the response bits
-
-process recieved data (bit mask and rearange to extract what you need based on datasheet)
-Only device specific parts are config values, tx, and post processing of rx
-
-close spi file when done using* depending on what devices are connected may require funkiness 
-to access multiple things at once with different config setting
-*/
 
 // default values, shouldn't ever be used as must initialze before doing a transfer but idk
 static uint8_t mode = 0;        // SPI mode: Mode 0 (CPOL=0, CPHA=0)
@@ -83,6 +63,34 @@ int spi_transfer(int fd, uint8_t *tx, uint8_t *rx, size_t length)
     return ret;
 }
 
+int spi_read_mcp3208_channel(uint8_t channel, int* fd)
+{
+    if (channel > 7)
+    {
+        fprintf(stderr, "Invalid channel specified. MCP3208 has 8 channels (0-7).\n");
+        return -1;
+    }
+
+    uint8_t tx[3] = {(uint8_t)(0x06 | ((channel & 0x04) >> 2)),
+                     (uint8_t)((channel & 0x03) << 6),
+                     0x00};
+    uint8_t rx[3] = {0};
+
+    int bytes_read = spi_transfer(*fd, tx, rx, sizeof(tx));
+
+    if (bytes_read > 0)
+    {
+        // The 12-bit value is split across the two received bytes (rx_buffer[1] and rx_buffer[2]).
+        // The upper 4 bits of the value are in rx_buffer[1], and the lower 8 bits are in rx_buffer[2].
+        // The `& 0x0F` masks off the junk bits in the first data byte.
+        return ((rx[1] & 0x0F) << 8) | rx[2];
+    }
+
+    return -1; // Return -1 on failure
+}
+
 void spi_disable(int* fd) {
     close(*fd);
 }
+
+
