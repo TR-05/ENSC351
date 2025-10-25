@@ -9,6 +9,8 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <netinet/in.h>
+#include "sampler.h"
+#include <math.h>
 
 #define MAX_LEN 1500
 #define PORT 12345
@@ -81,7 +83,23 @@ static void UDP_send_message(char message[])
 }
 
 static char prevCommand[MAX_LEN];
-//static char prevReturnCommand[MAX_LEN];
+static char *helpMessage = "Accepted command examples:"
+                           "count -- get the total number of samples taken.\n"
+                           "length -- get the number of samples taken in the previously completed second.\n"
+                           "dips -- get the number of dips in the previously completed second.\n"
+                           "history -- get all the samples in the previously completed second.\n"
+                           "stop -- cause the server program to end.\n"
+                           "<enter> -- repeat last command.\n"
+                           "?"
+                           "Accepted command examples:\n"
+                           "count -- get the total number of samples taken.\n"
+                           "length -- get the number of samples taken in the previously completed second.\n"
+                           "dips -- get the number of dips in the previously completed second.\n"
+                           "history -- get all the samples in the previously completed second.\n"
+                           "stop -- cause the server program to end.\n"
+                           "<enter> -- repeat last command.\n";
+
+// static char prevReturnCommand[MAX_LEN];
 static void UDP_process_message(char command[])
 {
     char returnMessage[MAX_LEN];
@@ -89,15 +107,22 @@ static void UDP_process_message(char command[])
 
     if (strcmp(command, "help") == 0 || strcmp(command, "?") == 0)
     {
-        UDP_send_message("return a brief summary of supported commands");
+
+        strncpy(returnMessage, helpMessage, MAX_LEN - 1);
+        returnMessage[MAX_LEN - 1] = '\0';
+        UDP_send_message(returnMessage);
     }
     else if (strcmp(command, "count") == 0)
     {
-        UDP_send_message("return the total number of light samples taken so far (big number)");
+        snprintf(returnMessage, MAX_LEN, "# samples taken total: %llu\n", Sampler_getNumSamplesTaken());
+        returnMessage[MAX_LEN - 1] = '\0';
+        UDP_send_message(returnMessage);
     }
     else if (strcmp(command, "length") == 0)
     {
-        UDP_send_message("return how many samples were taken in the last second");
+        snprintf(returnMessage, MAX_LEN, "# samples taken total: %d\n", Sampler_getHistorySize());
+        returnMessage[MAX_LEN - 1] = '\0';
+        UDP_send_message(returnMessage);
     }
     else if (strcmp(command, "dips") == 0)
     {
@@ -105,24 +130,51 @@ static void UDP_process_message(char command[])
     }
     else if (strcmp(command, "history") == 0)
     {
+        int size = 0;
+        double* history = Sampler_getHistory(&size);
+        int samplesPerPacket = floor(1500 / sizeof(double));
+        int packets = ceil(size / (double)samplesPerPacket);
+        char* initial_str;
+        char* packet_str;
+        for (int i = 0; i < packets; i++) {
+            for (int j = 0; j < samplesPerPacket; j++) {
+                char* sampleData;
+                snprintf(sampleData, MAX_LEN, "%.3f,", history[i*samplesPerPacket + j]);
+                int str_len = strlen(packet_str);
+                free(packet_str);
+                packet_str = (char *)malloc(str_len + strlen(sampleData) + 1);
+                strcpy(packet_str, initial_str);
+                strcat(packet_str, sampleData);
+                packet_str = (char *)malloc(strlen(packet_str) + 1);
+                strcpy(initial_str, packet_str);
+            }
+            UDP_send_message(packet_str);
+        }
+
+
         UDP_send_message("return all data samples from previous second, see pdf for details");
+        free(history);
     }
     else if (strcmp(command, "") == 0)
     {
-        if (strcmp(command, prevCommand) == 0 && strcmp(command, "") != 0) {
-                UDP_send_message("repeat previous command (if not first command!)");
+        if (strcmp(command, prevCommand) == 0 && strcmp(command, "") != 0)
+        {
+            UDP_send_message("repeat previous command (if not first command!)");
         }
     }
     else if (strcmp(command, "stop") == 0)
     {
         UDP_send_message("exit the program gracefully, closing all open sockets threads dynamic memmory, etc");
-
     }
 
-    for (size_t i = 0; i < MAX_LEN - 1; i++) {
-        if (i < strlen(command) - 1) {
-        prevCommand[i] = command[i];
-        } else {
+    for (size_t i = 0; i < MAX_LEN - 1; i++)
+    {
+        if (i < strlen(command) - 1)
+        {
+            prevCommand[i] = command[i];
+        }
+        else
+        {
             prevCommand[i] = 0;
         }
     }

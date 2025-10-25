@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define SAMPLE_BUFFER_SIZE 1000
 pthread_mutex_t SamplerMutex = PTHREAD_MUTEX_INITIALIZER; /* mutex lock for history */
 
 static double currentAverageLight = 0; // from 0 - 1
@@ -25,7 +26,7 @@ static void *SamplerThreadFunc(void *pArg)
         long long currentTime = get_time_in_ms();
 
         // Sample from photocell
-        int index = (currentTime - lastTime) % 1000;
+        int index = (currentTime - lastTime) % SAMPLE_BUFFER_SIZE;
         volatile_history[index] = (spi_read_mcp3208_channel(4, &fd)) * 5.0 / 4095.0; // convert to voltage by by (read value from 0 - 1) * VRef
         sampleCount++;
         if (firstSample)
@@ -60,8 +61,8 @@ static void *SamplerThreadFunc(void *pArg)
     return 0;
 }
 pthread_t tidSampler;
-static double volatile_history[1000]; // updates every 1ms using a circular buffer
-static double stable_history[1000];   // updates every 1 second
+static double volatile_history[SAMPLE_BUFFER_SIZE]; // updates every 1ms using a circular buffer
+static double stable_history[SAMPLE_BUFFER_SIZE];   // updates every 1 second
 void Sampler_init(void)
 {
     pthread_create(&tidSampler, NULL, SamplerThreadFunc, &volatile_history);
@@ -100,6 +101,7 @@ int Sampler_getHistorySize(void)
 // Note: It provides both data and size to ensure consistency.
 double *Sampler_getHistory(int *size)
 {
+    *size = SAMPLE_BUFFER_SIZE;
     printf("size: %d\n", *size);
     double *newHistory = malloc(sizeof(double) * *size);
     pthread_mutex_lock(&SamplerMutex);
