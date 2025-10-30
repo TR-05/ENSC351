@@ -1,0 +1,38 @@
+trevor@trr3-beagle:/mnt/remote/myApps$ cat /boot/firmware/extlinux/extlinux.conf
+output below:
+
+
+menu title BeagleY-AI microSD (extlinux.conf) (swap enabled)
+
+timeout 50
+
+default microSD (default)
+
+label microSD (failsafe)
+    kernel /Image.gz
+    append console=ttyS2,115200n8 earlycon=ns16550a,mmio32,0x02800000 root=/dev/mmcblk1p3 ro rootfstype=ext4 rootwait net.ifnames=0
+    fdtdir /
+    fdt /ti/k3-am67a-beagley-ai.dtb
+
+label transfer microSD rootfs to NVMe (advanced)
+    kernel /Image.gz
+    append console=ttyS2,115200n8 root=/dev/mmcblk1p3 ro rootfstype=ext4 rootwait net.ifnames=0 init=/usr/sbin/init-beagle-flasher-mv-rootfs-to-nvme
+    fdtdir /
+    fdt /ti/k3-am67a-beagley-ai.dtb
+    initrd /initrd.img
+
+label microSD (debug)
+    kernel /Image.gz
+    append console=ttyS2,115200n8 earlycon=ns16550a,mmio32,0x02800000 root=/dev/mmcblk1p3 ro rootfstype=ext4 rootwait net.ifnames=0
+    fdtdir /
+    fdt /ti/k3-am67a-beagley-ai.dtb
+    #initrd /initrd.img
+
+label microSD (default)
+    kernel /Image.gz
+    append console=ttyS2,115200n8 root=/dev/mmcblk1p3 ro rootfstype=ext4 resume=/dev/mmcblk1p2 rootwait net.ifnames=0 quiet
+    fdtdir /
+    fdt /ti/k3-am67a-beagley-ai.dtb
+    fdtoverlays /overlays/k3-am67a-beagley-ai-spidev0.dtbo /overlays/k3-am67a-beagley-ai-pwm-epwm0-gpio5-gpio14.dtbo /overlays/k3-am67a-beagley-ai-pwm-epwm1-gpio21-gpio13.dtbo
+    initrd /initrd.img
+
