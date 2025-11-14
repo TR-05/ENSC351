@@ -181,3 +181,5 @@ cat /sys/module/usbcore/parameters/usbfs_memory_mb
 as2
 aarch64-linux-gnu-gcc noworky.c -o noworky -Wall -g -std=c99 -D _POSIX_C_SOURCE=200809L -Werror
 cp noworky ../../../public/myApps
+
+netcat -u 192.168.7.2 12345
